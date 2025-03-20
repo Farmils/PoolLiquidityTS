@@ -1,14 +1,23 @@
-import {createContext, FC, ReactNode, useState} from "react";
+import { createContext, FC, ReactNode, useContext, useState } from 'react'
+import { ContextType, PoolData, UserBalance } from './types.ts'
 
-const Context = createContext({});
+const Context = createContext<ContextType>({} as ContextType)
 
-const ContextProvider: FC<{children:ReactNode}> = ({ children }) => {
-    const [wallet,setWallet]=useState("")
-    const values={
-        wallet,
-        setWallet
-    }
+const useGetGlobalContext = () => useContext(Context)
+const ContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const [wallet, setWallet] = useState('')
+  const [pool, setPool] = useState<PoolData[]>([])
+  const [userData, setUserData] = useState<UserBalance | null>(null)
 
-    return <Context.Provider value={values}>{children}</Context.Provider>;
+  const values: ContextType = {
+    wallet,
+    setWallet,
+    pool,
+    setPool,
+    userData,
+    setUserData,
+  }
+
+  return <Context.Provider value={values}>{children}</Context.Provider>
 }
-export {Context,ContextProvider};
+export { Context, ContextProvider, useGetGlobalContext }
